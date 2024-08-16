@@ -155,7 +155,17 @@ export default {
     clearInterval(this.lifeInterval);
   },
   methods: {
-    ...mapActions(['feedPet', 'waterPet', 'playWithPet', 'cleanPet', 'increaseEnergy', 'decreaseEnergy', 'increaseLife', 'decreaseLife', 'resetPet']),
+    ...mapActions([
+      'feedPet', 
+      'waterPet', 
+      'playWithPet', 
+      'cleanPet', 
+      'increaseEnergy', 
+      'decreaseEnergy', 
+      'increaseLife', 
+      'decreaseLife', 
+      'resetPet'
+    ]),
 
     startAnimation(images, duration, callback) {
       clearInterval(this.animationInterval);
@@ -194,7 +204,6 @@ export default {
       }, 1500); // Refill every 1.5 seconds
     },
     stopSleeping() {
-      // if (this.isDead || this.pet.energy === 0 || !this.isSleeping) return;
       if (this.isDead || !this.isSleeping) return;
       this.isSleeping = false;
       clearInterval(this.animationInterval); // Stop sleeping animation
@@ -283,6 +292,7 @@ export default {
 
     // -- Handle Methods --
     handleFeed() {
+      if (this.isLowEnergy()) return;
       if (this.isSleeping) {
         this.stopSleeping();
       }
@@ -293,6 +303,7 @@ export default {
       }
     },
     handleThirst() {
+      if (this.isLowEnergy()) return;
       if (this.isSleeping) {
         this.stopSleeping();
       }
@@ -303,6 +314,7 @@ export default {
       }
     },
     handlePlay() {
+      if (this.isLowEnergy()) return;
       if (this.isSleeping) {
         this.stopSleeping();
       }
@@ -313,6 +325,7 @@ export default {
       }
     },
     handleClean() {
+      if (this.isLowEnergy()) return;
       if (this.isSleeping) {
         this.stopSleeping();
       }
@@ -322,6 +335,10 @@ export default {
         this.startAnimation(this.cleanImages, 3000);
       }
     },
+    isLowEnergy() {
+      return this.energyPercentage <= 2;
+    },
+
     handleDeath() {
       this.isDead = true;
       clearInterval(this.animationInterval);
