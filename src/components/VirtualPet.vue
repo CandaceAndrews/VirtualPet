@@ -3,6 +3,10 @@
     <div class="virtual-pet" @dragover.prevent @drop="onDrop">
       <img :src="petImage" :class="{ 'flipped': flipped }" alt="Virtual Pet" class="pet-image" />
       <NotificationAlert ref="notification" />
+
+      <!-- Death message -->
+       <div v-if="isDead" class="death-message">Your pet has died</div>
+
       <button v-if="isDead" @click="handleRestart" class="restart-button">Restart</button>
     </div>
   </AppBackground>
@@ -402,10 +406,10 @@ export default {
 }
 
 .restart-button {
-  position: absolute;
-  top: 50%;
+  position: fixed;
+  bottom: 50%; /* Adjusted to move it higher */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0); /* Center horizontally */
   padding: 10px 20px;
   font-size: 16px;
   background-color: #ff4a4a;
@@ -416,7 +420,20 @@ export default {
   z-index: 10;
 }
 
+.death-message {
+  font-size: 48px;
+  color: red;
+  font-weight: bold;
+  position: fixed; /* Use fixed for consistent centering */
+  top: 30%; /* Adjusted to move it down slightly */
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  z-index: 20;
+}
+
+
 .restart-button:hover {
   background-color: #ff0000;
 }
+
 </style>
