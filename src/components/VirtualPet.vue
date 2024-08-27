@@ -9,6 +9,17 @@
 
       <button v-if="isDead" @click="handleRestart" class="restart-button">Restart</button>
     </div>
+    <!-- Dressing Room Button -->
+    <button v-if="!isDead && !isDressingRoomOpen" @click="openDressingRoom">Customize Appearance</button>
+
+    <!-- Dressing Room Component -->
+    <DressingRoom
+      v-if="isDressingRoomOpen"
+      @applyChanges="applyChanges"
+      @cancelChanges="closeDressingRoom"
+      :petImages="walkImages"
+      :currentImage="petImage"
+    />
   </AppBackground>
 </template>
 
@@ -16,41 +27,42 @@
 import { mapGetters, mapActions } from 'vuex';
 import NotificationAlert from './NotificationAlert.vue';
 import AppBackground from './AppBackground.vue';
+import DressingRoom from './DressingRoom.vue';
 import { audioMixin } from '@/mixins/audioMixin.js';
 import eventBus from '@/eventBus';
 
 // Walk Images
-import walk1 from '@/assets/images/walkImages/walk1.png';
-import walk2 from '@/assets/images/walkImages/walk2.png';
-import walk3 from '@/assets/images/walkImages/walk3.png';
-import walk4 from '@/assets/images/walkImages/walk4.png';
+import walk1 from '@/assets/images/red/walkImages/walk1.png';
+import walk2 from '@/assets/images/red/walkImages/walk2.png';
+import walk3 from '@/assets/images/red/walkImages/walk3.png';
+import walk4 from '@/assets/images/red/walkImages/walk4.png';
 // Eat Images
-import eat1 from '@/assets/images/eatImages/eat1.png';
-import eat2 from '@/assets/images/eatImages/eat2.png';
-import eat3 from '@/assets/images/eatImages/eat3.png';
-import eat4 from '@/assets/images/eatImages/eat4.png';
+import eat1 from '@/assets/images/red/eatImages/eat1.png';
+import eat2 from '@/assets/images/red/eatImages/eat2.png';
+import eat3 from '@/assets/images/red/eatImages/eat3.png';
+import eat4 from '@/assets/images/red/eatImages/eat4.png';
 // Drink Images
-import drink1 from '@/assets/images/drinkImages/drink1.png';
-import drink2 from '@/assets/images/drinkImages/drink2.png';
-import drink3 from '@/assets/images/drinkImages/drink3.png';
-import drink4 from '@/assets/images/drinkImages/drink4.png';
+import drink1 from '@/assets/images/red/drinkImages/drink1.png';
+import drink2 from '@/assets/images/red/drinkImages/drink2.png';
+import drink3 from '@/assets/images/red/drinkImages/drink3.png';
+import drink4 from '@/assets/images/red/drinkImages/drink4.png';
 // Play Images
-import play1 from '@/assets/images/playImages/play1.png';
-import play2 from '@/assets/images/playImages/play2.png';
+import play1 from '@/assets/images/red/playImages/play1.png';
+import play2 from '@/assets/images/red/playImages/play2.png';
 // Clean Images
-import clean1 from '@/assets/images/cleanImages/clean1.png';
-import clean2 from '@/assets/images/cleanImages/clean2.png';
-import clean3 from '@/assets/images/cleanImages/clean3.png';
-import clean4 from '@/assets/images/cleanImages/clean4.png';
-import clean5 from '@/assets/images/cleanImages/clean5.png';
+import clean1 from '@/assets/images/red/cleanImages/clean1.png';
+import clean2 from '@/assets/images/red/cleanImages/clean2.png';
+import clean3 from '@/assets/images/red/cleanImages/clean3.png';
+import clean4 from '@/assets/images/red/cleanImages/clean4.png';
+import clean5 from '@/assets/images/red/cleanImages/clean5.png';
 // Sleep Images
-import sleep1 from '@/assets/images/sleepImages/sleep1.png';
-import sleep2 from '@/assets/images/sleepImages/sleep2.png';
+import sleep1 from '@/assets/images/red/sleepImages/sleep1.png';
+import sleep2 from '@/assets/images/red/sleepImages/sleep2.png';
 // Death Images
-import death1 from '@/assets/images/deathImages/death1.png';
-import death2 from '@/assets/images/deathImages/death2.png';
-import death3 from '@/assets/images/deathImages/death3.png';
-import death4 from '@/assets/images/deathImages/death4.png';
+import death1 from '@/assets/images/red/deathImages/death1.png';
+import death2 from '@/assets/images/red/deathImages/death2.png';
+import death3 from '@/assets/images/red/deathImages/death3.png';
+import death4 from '@/assets/images/red/deathImages/death4.png';
 
 // Sounds
 import feedSound from '@/assets/sounds/feed.mp3';
@@ -64,6 +76,7 @@ export default {
   components: {
     NotificationAlert,
     AppBackground,
+    DressingRoom,
   },
   computed: {
     ...mapGetters(['pet']),
@@ -89,6 +102,7 @@ export default {
       isCleaning: false,
       isSleeping: false,
       isDead: false,
+      isDressingRoomOpen: false,
       animationInterval: null,
       movementInterval: null,
       position: -900, // Added to keep track of position
@@ -231,6 +245,21 @@ export default {
           petElement.style.left = `${this.position}px`;
         }
       }, 40);
+    },
+
+    // -- Dressing Room -- 
+    openDressingRoom() {
+      this.isDressingRoomOpen = true;
+      clearInterval(this.animationInterval);
+      clearInterval(this.movementInterval);
+    },
+    closeDressingRoom() {
+      this.isDressingRoomOpen = false;
+      this.startWalkingAnimation();
+    },
+    applyChanges(newImage) {
+      this.petImage = newImage;
+      this.closeDressingRoom();
     },
 
     // -- Timer Methods --
