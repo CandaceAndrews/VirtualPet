@@ -8,6 +8,15 @@
        <div v-if="isDead" class="death-message">Your pet has died</div>
 
       <button v-if="isDead" @click="handleRestart" class="restart-button">Restart</button>
+    
+    <!-- Color Selector -->
+     <div v-if="!isDead" class="color-selector">
+      <span>Select Pet Color</span>
+      <select v-model="selectedColor" @change="updatePetImage">
+        <option value="Red">Red</option>
+        <option value="yellow">Yellow</option>
+      </select>
+     </div>
     </div>
   </AppBackground>
 </template>
@@ -20,37 +29,75 @@ import { audioMixin } from '@/mixins/audioMixin.js';
 import eventBus from '@/eventBus';
 
 // Walk Images
-import walk1 from '@/assets/images/walkImages/walk1.png';
-import walk2 from '@/assets/images/walkImages/walk2.png';
-import walk3 from '@/assets/images/walkImages/walk3.png';
-import walk4 from '@/assets/images/walkImages/walk4.png';
+import walk1Red from '@/assets/images/red/walkImages/walk1.png';
+import walk2Red from '@/assets/images/red/walkImages/walk2.png';
+import walk3Red from '@/assets/images/red/walkImages/walk3.png';
+import walk4Red from '@/assets/images/red/walkImages/walk4.png';
+
+import walk1Yellow from '@/assets/images/yellow/walkImages/walk1.png';
+import walk2Yellow from '@/assets/images/yellow/walkImages/walk2.png';
+import walk3Yellow from '@/assets/images/yellow/walkImages/walk3.png';
+import walk4Yellow from '@/assets/images/yellow/walkImages/walk4.png';
+
 // Eat Images
-import eat1 from '@/assets/images/eatImages/eat1.png';
-import eat2 from '@/assets/images/eatImages/eat2.png';
-import eat3 from '@/assets/images/eatImages/eat3.png';
-import eat4 from '@/assets/images/eatImages/eat4.png';
+import eat1Red from '@/assets/images/red/eatImages/eat1.png';
+import eat2Red  from '@/assets/images/red/eatImages/eat2.png';
+import eat3Red  from '@/assets/images/red/eatImages/eat3.png';
+import eat4Red  from '@/assets/images/red/eatImages/eat4.png';
+
+import eat1Yellow from '@/assets/images/yellow/eatImages/eat1.png';
+import eat2Yellow  from '@/assets/images/yellow/eatImages/eat2.png';
+import eat3Yellow  from '@/assets/images/yellow/eatImages/eat3.png';
+import eat4Yellow  from '@/assets/images/yellow/eatImages/eat4.png';
+
 // Drink Images
-import drink1 from '@/assets/images/drinkImages/drink1.png';
-import drink2 from '@/assets/images/drinkImages/drink2.png';
-import drink3 from '@/assets/images/drinkImages/drink3.png';
-import drink4 from '@/assets/images/drinkImages/drink4.png';
+import drink1Red  from '@/assets/images/red/drinkImages/drink1.png';
+import drink2Red  from '@/assets/images/red/drinkImages/drink2.png';
+import drink3Red  from '@/assets/images/red/drinkImages/drink3.png';
+import drink4Red  from '@/assets/images/red/drinkImages/drink4.png';
+
+import drink1Yellow from '@/assets/images/yellow/drinkImages/drink1.png';
+import drink2Yellow from '@/assets/images/yellow/drinkImages/drink2.png';
+import drink3Yellow from '@/assets/images/yellow/drinkImages/drink3.png';
+import drink4Yellow from '@/assets/images/yellow/drinkImages/drink4.png';
+
 // Play Images
-import play1 from '@/assets/images/playImages/play1.png';
-import play2 from '@/assets/images/playImages/play2.png';
+import play1Red  from '@/assets/images/red/playImages/play1.png';
+import play2Red  from '@/assets/images/red/playImages/play2.png';
+
+import play1Yellow from '@/assets/images/yellow/playImages/play1.png';
+import play2Yellow from '@/assets/images/yellow/playImages/play2.png';
+
 // Clean Images
-import clean1 from '@/assets/images/cleanImages/clean1.png';
-import clean2 from '@/assets/images/cleanImages/clean2.png';
-import clean3 from '@/assets/images/cleanImages/clean3.png';
-import clean4 from '@/assets/images/cleanImages/clean4.png';
-import clean5 from '@/assets/images/cleanImages/clean5.png';
+import clean1Red  from '@/assets/images/red/cleanImages/clean1.png';
+import clean2Red  from '@/assets/images/red/cleanImages/clean2.png';
+import clean3Red  from '@/assets/images/red/cleanImages/clean3.png';
+import clean4Red  from '@/assets/images/red/cleanImages/clean4.png';
+import clean5Red  from '@/assets/images/red/cleanImages/clean5.png';
+
+import clean1Yellow from '@/assets/images/yellow/cleanImages/clean1.png';
+import clean2Yellow from '@/assets/images/yellow/cleanImages/clean2.png';
+import clean3Yellow from '@/assets/images/yellow/cleanImages/clean3.png';
+import clean4Yellow from '@/assets/images/yellow/cleanImages/clean4.png';
+import clean5Yellow from '@/assets/images/yellow/cleanImages/clean5.png';
+
 // Sleep Images
-import sleep1 from '@/assets/images/sleepImages/sleep1.png';
-import sleep2 from '@/assets/images/sleepImages/sleep2.png';
+import sleep1Red  from '@/assets/images/red/sleepImages/sleep1.png';
+import sleep2Red  from '@/assets/images/red/sleepImages/sleep2.png';
+
+import sleep1Yellow  from '@/assets/images/yellow/sleepImages/sleep1.png';
+import sleep2Yellow  from '@/assets/images/yellow/sleepImages/sleep2.png';
+
 // Death Images
-import death1 from '@/assets/images/deathImages/death1.png';
-import death2 from '@/assets/images/deathImages/death2.png';
-import death3 from '@/assets/images/deathImages/death3.png';
-import death4 from '@/assets/images/deathImages/death4.png';
+import death1Red  from '@/assets/images/red/deathImages/death1.png';
+import death2Red  from '@/assets/images/red/deathImages/death2.png';
+import death3Red  from '@/assets/images/red/deathImages/death3.png';
+import death4Red  from '@/assets/images/red/deathImages/death4.png';
+
+import death1Yellow from '@/assets/images/yellow/deathImages/death1.png';
+import death2Yellow from '@/assets/images/yellow/deathImages/death2.png';
+import death3Yellow from '@/assets/images/yellow/deathImages/death3.png';
+import death4Yellow from '@/assets/images/yellow/deathImages/death4.png';
 
 // Sounds
 import feedSound from '@/assets/sounds/feed.mp3';
@@ -69,19 +116,69 @@ export default {
     ...mapGetters(['pet']),
     energyPercentage() {
       return this.pet.energy;
+    },
+    walkImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [walk1Yellow, walk2Yellow, walk3Yellow, walk4Yellow];
+        default:
+          return [walk1Red, walk2Red, walk3Red, walk4Red];
+      }
+    },
+    eatImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [eat1Yellow, eat2Yellow, eat3Yellow, eat4Yellow];
+        default:
+          return [eat1Red, eat2Red, eat3Red, eat4Red];
+      }
+    },
+    drinkImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [drink1Yellow, drink2Yellow, drink3Yellow, drink4Yellow];
+        default:
+          return [drink1Red, drink2Red, drink3Red, drink4Red];
+      }
+    },
+    playImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [play1Yellow, play2Yellow];
+        default:
+          return [play1Red, play2Red];
+      }
+    },
+    cleanImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [clean1Yellow, clean2Yellow, clean3Yellow, clean4Yellow, clean5Yellow];
+        default:
+          return [clean1Red, clean2Red, clean3Red, clean4Red, clean5Red];
+      }
+    },
+    sleepImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [sleep1Yellow, sleep2Yellow];
+        default:
+          return [sleep1Red, sleep2Red];
+      }
+    },
+    deathImages() {
+      switch (this.selectedColor) {
+        case 'yellow':
+          return [death1Yellow, death2Yellow, death3Yellow, death4Yellow];
+        default:
+          return [death1Red, death2Red, death3Red, death4Red];
+      }
     }
   },
   data() {
     return {
-      walkImages: [walk1, walk2, walk3, walk4],
-      eatImages: [eat1, eat2, eat3, eat4],
-      drinkImages: [drink1, drink2, drink3, drink4],
-      playImages: [play1, play2],
-      cleanImages: [clean1, clean2, clean3, clean4, clean5],
-      sleepImages: [sleep1, sleep2],
-      deathImages: [death1, death2, death3, death4],
+      selectedColor: 'red',
+      petImage: walk1Red,
       currentImageIndex: 0,
-      petImage: walk1,
       flipped: false,
       isEating: false,
       isDrinking: false,
@@ -232,6 +329,11 @@ export default {
         }
       }, 40);
     },
+
+    updatePetImage() {
+      this.petImage = this.walkImages[0];
+    },
+
 
     // -- Timer Methods --
     startHungerTimer() {
@@ -431,9 +533,16 @@ export default {
   z-index: 20;
 }
 
-
 .restart-button:hover {
   background-color: #ff0000;
 }
 
+.color-selector {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
 </style>
