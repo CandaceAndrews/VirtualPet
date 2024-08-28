@@ -28,17 +28,43 @@
       id="clean"
       @dragstart="onDragStart($event, 'clean')"
     />
+  <button @click="toggleColorSelector">
+    <img 
+      src="@/assets/icons/color.png" 
+      alt="Change Appearance"
+      id="color"
+      />
+  </button>
+  
+  <!-- Color Selector (initially hidden) -->
+  <div v-if="showColorSelector" class="color-selector">
+    <button v-for="(color, index) in colors" :key="index" @click="changeColor(color)">
+      <div :style="{ backgroundColor: color }" class="color-circle"></div>
+    </button>
+  </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'PetActions',
+  data() {
+    return {
+      showColorSelector: false,
+      colors: ['#ff0000', '#00ff00', '#0000ff'], 
+    };
+  },
   methods: {
     onDragStart(event, action) {
       event.dataTransfer.setData('action', action);
-    }
-  }
+    },
+    toggleColorSelector() {
+      this.showColorSelector = !this.showColorSelector;
+    },
+    changeColor(color) {
+      this.selectedColor = color;
+    },
+  },
 };
 </script>
 
@@ -73,5 +99,31 @@ export default {
   width: 50px;
   height: 50px;
   cursor: grab;
+}
+
+#color {
+  width: 50px;
+  height: 50px;
+  cursor: grab;
+}
+
+.color-selector {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  position: absolute; /* Adjust based on your layout */
+  bottom: 60px; /* Adjust to fit under the icons */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+  border: 2px solid #fff;
 }
 </style>
